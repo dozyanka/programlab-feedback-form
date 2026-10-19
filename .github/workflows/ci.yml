@@ -1,0 +1,29 @@
+name: PHP checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: gd, pdo_sqlite
+          coverage: none
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: Syntax check for PHP
+        run: find . -type f -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
+      - name: Syntax check for JavaScript
+        run: node --check public/assets/app.js
+      - name: Run unit checks
+        run: php tests/run.php

@@ -1,0 +1,10 @@
+.git
+.github
+.env
+vendor
+storage/*
+!storage/.gitkeep
+*.zip
+node_modules
+coverage
+.DS_Store
